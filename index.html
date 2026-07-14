@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blip App - Learning Just Got More Fun</title>
+  <meta name="description" content="Welcome to the Blip interactive classroom dashboard.">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/my-classes.css">
+  <link rel="stylesheet" href="css/timetable.css">
+  <link rel="stylesheet" href="css/recordings.css">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="app-shell">
+
+  <!-- Mobile Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar Component Container -->
+  <aside class="sidebar" id="sidebar-container">
+    <!-- components/sidebar.html will be injected here -->
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    
+    <!-- Navbar Component Container -->
+    <header class="shell-navbar" id="navbar-container">
+      <!-- components/navbar.html will be injected here -->
+    </header>
+
+    <!-- App Content Area (For future pages) -->
+    <main class="content-area" id="main-content">
+      
+      <!-- Temporary Empty State -->
+      <div class="empty-state">
+        <i data-lucide="layout-template"></i>
+        <h2>Page Content Will Render Here</h2>
+        <p>This space is reserved for the active page route.</p>
+      </div>
+      
+    </main>
+
+  </div>
+
+  <!-- Application Logic -->
+  <script type="module" src="js/shell.js?v=2"></script>
+</body>
+</html>
