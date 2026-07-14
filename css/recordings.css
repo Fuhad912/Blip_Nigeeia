@@ -969,21 +969,127 @@
 
 @media (max-width: 768px) {
 
-  /* --- Layout --- */
+  /* =================================================================
+     NETFLIX-STYLE MOBILE LAYOUT
+     Horizontal scroll rows of compact thumbnail cards
+     ================================================================= */
+
   .recordings-wrapper {
-    gap: 20px;
+    gap: 22px;
   }
 
+  /* --- All grids → horizontal scroll rows --- */
   .rec-grid,
   .rec-continue-scroll {
-    grid-template-columns: 1fr;
-    gap: 14px;
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+
+  .rec-grid::-webkit-scrollbar,
+  .rec-continue-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* --- Compact Netflix-style cards --- */
+  .rec-card {
+    min-width: 150px;
+    max-width: 150px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(130, 113, 72, 0.08);
+    scroll-snap-align: start;
+  }
+
+  .rec-card:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(130, 113, 72, 0.08);
+  }
+
+  /* --- Thumbnail --- */
+  .rec-thumbnail-wrap {
+    padding-top: 60%;  /* Slightly taller than 16:9 for compact cards */
+  }
+
+  /* Play overlay: always visible on mobile (no hover on touch) */
+  .rec-play-overlay {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.18);
+  }
+
+  .rec-play-btn {
+    width: 36px;
+    height: 36px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .rec-play-btn svg {
+    width: 15px;
+    height: 15px;
+    margin-left: 1px;
+  }
+
+  .rec-subject-tag {
+    font-size: 8px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    top: 6px;
+    left: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .rec-duration-badge {
+    font-size: 9px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    bottom: 6px;
+    right: 6px;
+  }
+
+  /* --- Card body: title only --- */
+  .rec-card-body {
+    padding: 8px 8px 0 8px;
+    gap: 0;
+  }
+
+  .rec-card-title {
+    font-size: 11.5px;
+    line-height: 1.3;
+    -webkit-line-clamp: 2;
+    font-weight: 600;
+  }
+
+  /* Hide verbose content — Netflix cards only show thumbnail + title */
+  .rec-card-subject,
+  .rec-card-teacher,
+  .rec-card-date,
+  .rec-meta-row,
+  .rec-card-actions {
+    display: none;
+  }
+
+  /* --- Progress bar: thin & minimal for Continue Watching --- */
+  .rec-progress-section {
+    padding: 6px 8px 8px 8px;
+  }
+
+  .rec-progress-label {
+    display: none;
+  }
+
+  .rec-progress-bar-bg {
+    height: 3px;
+    border-radius: 2px;
   }
 
   /* --- Header --- */
   .rec-header {
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
     align-items: flex-start;
   }
 
@@ -1001,12 +1107,13 @@
 
   /* --- Controls --- */
   .rec-controls {
-    gap: 14px;
+    gap: 12px;
   }
 
   .rec-controls-row {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
   }
 
   .rec-search-wrapper {
@@ -1015,15 +1122,15 @@
   }
 
   .rec-search-input {
-    padding: 12px 12px 12px 40px;
-    font-size: 14px;
-    border-radius: 12px;
+    padding: 11px 12px 11px 38px;
+    font-size: 13px;
+    border-radius: 10px;
   }
 
   .rec-search-wrapper svg {
-    left: 14px;
-    width: 18px;
-    height: 18px;
+    left: 12px;
+    width: 16px;
+    height: 16px;
   }
 
   .rec-sort-wrapper {
@@ -1032,19 +1139,19 @@
 
   .rec-sort-select {
     width: 100%;
-    padding: 12px 40px 12px 14px;
+    padding: 10px 38px 10px 14px;
     font-size: 13px;
-    border-radius: 12px;
+    border-radius: 10px;
   }
 
-  /* Filter chips — horizontal scroll is fine here, they're small */
+  /* Filter chips */
   .rec-filters {
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding-bottom: 2px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    gap: 8px;
+    gap: 6px;
   }
 
   .rec-filters::-webkit-scrollbar {
@@ -1055,121 +1162,43 @@
     flex-shrink: 0;
     padding: 6px 14px;
     font-size: 12px;
-  }
-
-  /* --- Cards: compact mobile design --- */
-  .rec-card {
-    border-radius: 16px;
-  }
-
-  .rec-thumbnail-wrap {
-    padding-top: 50%; /* Slightly shorter than 16:9 to save space */
-  }
-
-  .rec-subject-tag {
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 6px;
-    top: 8px;
-    left: 8px;
-  }
-
-  .rec-duration-badge {
-    font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 6px;
-    bottom: 8px;
-    right: 8px;
-  }
-
-  .rec-play-btn {
-    width: 44px;
-    height: 44px;
-  }
-
-  .rec-play-btn svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .rec-card-body {
-    padding: 12px 14px 0 14px;
-    gap: 3px;
-  }
-
-  .rec-card-subject {
-    font-size: 10px;
-  }
-
-  .rec-card-title {
-    font-size: 15px;
-    -webkit-line-clamp: 1;
-  }
-
-  .rec-card-teacher {
-    font-size: 13px;
-  }
-
-  .rec-card-date {
-    font-size: 12px;
-  }
-
-  .rec-meta-row {
-    padding: 0 14px;
-    margin-top: 6px;
-    font-size: 12px;
-    gap: 8px;
-  }
-
-  .rec-progress-section {
-    padding: 6px 14px 0 14px;
-  }
-
-  .rec-progress-label {
-    font-size: 11px;
-  }
-
-  .rec-card-actions {
-    padding: 12px 14px 14px 14px;
-    flex-direction: row;
-    gap: 8px;
-  }
-
-  .rec-btn {
-    padding: 10px 0;
-    font-size: 13px;
-    border-radius: 12px;
+    border-radius: 8px;
   }
 
   /* --- Section titles --- */
   .rec-section-title {
-    font-size: 18px;
+    font-size: 17px;
+    margin-bottom: 2px;
   }
 
   .rec-section-subtitle {
-    font-size: 13px;
-    margin-bottom: 14px;
+    font-size: 12px;
+    margin-bottom: 10px;
   }
 
-  /* --- Watch Modal --- */
+  .rec-section-divider {
+    margin-bottom: 20px;
+  }
+
+  /* --- Watch Modal (bottom sheet) --- */
   .rec-watch-overlay {
-    padding: 12px;
+    padding: 0;
     align-items: flex-end;
   }
 
   .rec-watch-modal {
-    border-radius: 18px;
+    border-radius: 16px 16px 0 0;
     max-width: 100%;
-    max-height: 85vh;
+    max-height: 92vh;
   }
 
   .rec-player-wrapper {
-    border-radius: 18px 18px 0 0;
-    padding-top: 52%;
+    border-radius: 16px 16px 0 0;
+    padding-top: 56.25%;
   }
 
   .rec-watch-info {
-    padding: 16px;
+    padding: 14px 16px 20px;
   }
 
   .rec-watch-title {
@@ -1179,40 +1208,40 @@
 
   .rec-watch-meta {
     font-size: 12px;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
   }
 
   .rec-watch-close {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
   }
 
   .rec-watch-description {
     font-size: 13px;
-    line-height: 1.55;
+    line-height: 1.5;
     padding-top: 12px;
   }
 
-  /* --- Details Modal --- */
+  /* --- Details Modal (bottom sheet) --- */
   .rec-details-overlay {
-    padding: 12px;
+    padding: 0;
     align-items: flex-end;
   }
 
   .rec-details-modal {
-    padding: 20px;
-    border-radius: 18px;
-    max-height: 85vh;
+    padding: 20px 16px 24px;
+    border-radius: 16px 16px 0 0;
+    max-height: 80vh;
     overflow-y: auto;
   }
 
   .rec-details-header {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
   .rec-details-title h2 {
-    font-size: 18px;
+    font-size: 17px;
   }
 
   .rec-details-title p {
@@ -1220,12 +1249,12 @@
   }
 
   .rec-details-close {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
   }
 
   .rec-details-body {
-    gap: 14px;
+    gap: 12px;
   }
 
   .rec-detail-row svg {
@@ -1238,54 +1267,54 @@
   }
 
   .rec-detail-text p {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   /* --- Empty state --- */
   .rec-empty-state {
-    padding: 48px 20px;
-    border-radius: 20px;
+    padding: 40px 20px;
+    border-radius: 14px;
   }
 
   .rec-empty-icon {
-    width: 68px;
-    height: 68px;
-    border-radius: 20px;
-    margin-bottom: 18px;
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    margin-bottom: 14px;
   }
 
   .rec-empty-icon svg {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
   }
 
   .rec-empty-state h2 {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .rec-empty-state p {
     font-size: 13px;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
+  }
+
+  .rec-empty-btn {
+    padding: 11px 24px;
+    font-size: 13px;
   }
 }
 
 @media (max-width: 480px) {
-  .rec-card-actions {
-    flex-direction: row; /* Keep side-by-side even on smallest screens */
+  .rec-card {
+    min-width: 135px;
+    max-width: 135px;
   }
 
-  .rec-btn {
-    padding: 9px 0;
-    font-size: 12px;
+  .rec-card-title {
+    font-size: 11px;
   }
 
   .rec-watch-meta {
     flex-direction: column;
     gap: 4px;
-  }
-
-  .rec-watch-overlay,
-  .rec-details-overlay {
-    padding: 8px;
   }
 }
