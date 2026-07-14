@@ -1,0 +1,172 @@
+<div class="recordings-wrapper" role="main" aria-label="Recordings page">
+
+  <!-- ===== Page Header ===== -->
+  <section class="rec-header">
+    <div class="rec-header-left">
+      <h1>Recordings</h1>
+      <p>Catch up on previous lessons anytime.</p>
+    </div>
+    <div class="rec-badge" aria-label="48 lessons available">
+      <i data-lucide="video"></i>
+      <span id="recLessonCount">48 Lessons Available</span>
+    </div>
+  </section>
+
+  <!-- ===== Controls: Search + Sort ===== -->
+  <section class="rec-controls" aria-label="Search and filter recordings">
+
+    <div class="rec-controls-row">
+      <div class="rec-search-wrapper">
+        <i data-lucide="search" aria-hidden="true"></i>
+        <input
+          type="search"
+          id="recSearchInput"
+          class="rec-search-input"
+          placeholder="Search recordings..."
+          aria-label="Search recordings"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="rec-sort-wrapper">
+        <label for="recSortSelect" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Sort recordings</label>
+        <select id="recSortSelect" class="rec-sort-select" aria-label="Sort recordings">
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="subject">Subject</option>
+          <option value="recently-watched">Recently Watched</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Filter Chips -->
+    <div class="rec-filters" id="recFilters" role="group" aria-label="Filter by category">
+      <button class="rec-chip active" data-filter="all" aria-pressed="true">All</button>
+      <button class="rec-chip" data-filter="recent" aria-pressed="false">Recent</button>
+      <button class="rec-chip" data-filter="mathematics" aria-pressed="false">Mathematics</button>
+      <button class="rec-chip" data-filter="science" aria-pressed="false">Science</button>
+      <button class="rec-chip" data-filter="languages" aria-pressed="false">Languages</button>
+      <button class="rec-chip" data-filter="completed" aria-pressed="false">Completed</button>
+    </div>
+
+  </section>
+
+  <!-- ===== Continue Watching ===== -->
+  <section class="rec-continue-section" aria-label="Continue watching">
+    <h2 class="rec-section-title">Continue Watching</h2>
+    <p class="rec-section-subtitle">Pick up where you left off.</p>
+    <div class="rec-continue-scroll" id="recContinueScroll" role="list">
+      <!-- Injected via recordings.js -->
+    </div>
+  </section>
+
+  <!-- ===== Main Recordings Grid ===== -->
+  <section aria-label="All recordings">
+    <h2 class="rec-section-title">All Recordings</h2>
+    <div class="rec-grid" id="recGridContainer" role="list">
+      <!-- Cards injected via recordings.js -->
+    </div>
+  </section>
+
+  <!-- ===== Recommended For You ===== -->
+  <section class="rec-recommended-section" aria-label="Recommended recordings">
+    <div class="rec-section-divider"></div>
+    <h2 class="rec-section-title">Recommended For You</h2>
+    <p class="rec-section-subtitle">Based on your learning activity.</p>
+    <div class="rec-grid" id="recRecommendedGrid" role="list">
+      <!-- Cards injected via recordings.js -->
+    </div>
+  </section>
+
+  <!-- ===== Watch Modal ===== -->
+  <div class="rec-watch-overlay" id="recWatchOverlay" role="dialog" aria-modal="true" aria-label="Watch recording">
+    <div class="rec-watch-modal">
+      <div class="rec-player-wrapper">
+        <div class="rec-player-placeholder" id="recPlayerPlaceholder">
+          <i data-lucide="play-circle"></i>
+          <span>YouTube player will load here</span>
+        </div>
+      </div>
+      <div class="rec-watch-info">
+        <div class="rec-watch-header">
+          <div class="rec-watch-title-group">
+            <h2 class="rec-watch-title" id="recWatchTitle">Lesson Title</h2>
+            <div class="rec-watch-meta">
+              <span class="rec-watch-meta-item">
+                <i data-lucide="user"></i>
+                <span id="recWatchTeacher">Teacher Name</span>
+              </span>
+              <span class="rec-watch-meta-item">
+                <i data-lucide="book-open"></i>
+                <span id="recWatchSubject">Subject</span>
+              </span>
+              <span class="rec-watch-meta-item">
+                <i data-lucide="calendar"></i>
+                <span id="recWatchDate">Date</span>
+              </span>
+            </div>
+          </div>
+          <button class="rec-watch-close" id="recWatchClose" aria-label="Close player">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <p class="rec-watch-description" id="recWatchDescription">
+          Lesson description will appear here.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Details Modal ===== -->
+  <div class="rec-details-overlay" id="recDetailsOverlay" role="dialog" aria-modal="true" aria-label="Recording details">
+    <div class="rec-details-modal">
+      <div class="rec-details-header">
+        <div class="rec-details-title">
+          <h2 id="recDetailSubject">Subject</h2>
+          <p id="recDetailTeacher">Teacher Name</p>
+        </div>
+        <button class="rec-details-close" id="recDetailsClose" aria-label="Close details">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="rec-details-body">
+        <div class="rec-detail-row">
+          <i data-lucide="info"></i>
+          <div class="rec-detail-text">
+            <h4>Description</h4>
+            <p id="recDetailDescription">Lesson description.</p>
+          </div>
+        </div>
+        <div class="rec-detail-row">
+          <i data-lucide="calendar"></i>
+          <div class="rec-detail-text">
+            <h4>Recording Date</h4>
+            <p id="recDetailDate">--</p>
+          </div>
+        </div>
+        <div class="rec-detail-row">
+          <i data-lucide="clock"></i>
+          <div class="rec-detail-text">
+            <h4>Duration</h4>
+            <p id="recDetailDuration">--</p>
+          </div>
+        </div>
+        <div class="rec-detail-row">
+          <i data-lucide="book-open"></i>
+          <div class="rec-detail-text">
+            <h4>Related Lesson</h4>
+            <p id="recDetailLesson">--</p>
+          </div>
+        </div>
+        <div class="rec-detail-row">
+          <i data-lucide="users"></i>
+          <div class="rec-detail-text">
+            <h4>Meeting Date</h4>
+            <p id="recDetailMeetingDate">--</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,338 @@
+/* ==========================================================================
+   Timetable Page Styles
+   ========================================================================== */
+
+.timetable-wrapper {
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-text, #827148);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.fade-in {
+  animation: fadeUp 0.6s ease-out;
+}
+
+/* ==========================================================================
+   Header & Controls
+   ========================================================================== */
+.tt-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.tt-header-left h1 { font-size: 32px; font-weight: 700; color: #4F4428; margin: 0 0 4px 0; }
+.tt-header-left p { font-size: 16px; color: var(--color-text, #827148); margin: 0; }
+.tt-badge { display: flex; align-items: center; gap: 8px; background: rgba(165, 175, 121, 0.15); color: var(--color-primary, #A5AF79); padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 14px; }
+
+/* ==========================================================================
+   Summary Card
+   ========================================================================== */
+.tt-summary-card { background: linear-gradient(135deg, #FFFFFF 0%, #FAFAFA 100%); border-radius: 24px; padding: 32px; box-shadow: 0 10px 30px rgba(130, 113, 72, 0.05); border: 1px solid var(--color-border, #EFE7D6); }
+.tt-summary-content { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+.tt-summary-info h2 { font-size: 20px; font-weight: 700; color: #4F4428; margin: 0 0 16px 0; }
+.tt-summary-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+.tt-stat { display: flex; flex-direction: column; gap: 4px; }
+.tt-stat-label { font-size: 13px; font-weight: 600; color: #A5AF79; text-transform: uppercase; letter-spacing: 0.5px; }
+.tt-stat-value { font-size: 16px; font-weight: 700; color: #4F4428; }
+
+/* ==========================================================================
+   Segmented Control
+   ========================================================================== */
+.tt-view-switcher { display: flex; justify-content: flex-start; }
+.segmented-control { display: inline-flex; background: rgba(239, 231, 214, 0.5); padding: 4px; border-radius: 20px; }
+.segment-btn { padding: 8px 24px; border-radius: 16px; border: none; background: transparent; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; color: #827148; cursor: pointer; transition: all 0.2s ease; }
+.segment-btn.active { background: #FFFFFF; color: #4F4428; box-shadow: 0 2px 8px rgba(130, 113, 72, 0.1); }
+
+/* ==========================================================================
+   Responsive Timetable Views (Desktop Table vs Mobile Accordion)
+   ========================================================================== */
+
+/* Desktop Table View */
+.tt-desktop-view {
+  background: #FFFFFF;
+  border-radius: 24px;
+  border: 1px solid var(--color-border, #EFE7D6);
+  box-shadow: 0 10px 30px rgba(130, 113, 72, 0.03);
+  overflow-x: auto;
+}
+
+.tt-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px; /* Ensure table doesn't squash too much */
+}
+
+.tt-table th, .tt-table td {
+  border-bottom: 1px solid var(--color-border, #EFE7D6);
+  border-right: 1px solid var(--color-border, #EFE7D6);
+  padding: 16px;
+}
+
+.tt-table th:last-child, .tt-table td:last-child {
+  border-right: none;
+}
+
+.tt-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Header Row */
+.tt-table th {
+  background: #FAFAFA;
+  font-weight: 700;
+  color: #4F4428;
+  padding: 20px 16px;
+  text-align: center;
+  font-size: 15px;
+}
+.tt-table th.is-today {
+  background: rgba(165, 175, 121, 0.1);
+  color: var(--color-primary, #A5AF79);
+}
+
+.tt-time-col {
+  width: 100px;
+  background: #FAFAFA;
+  font-weight: 600;
+  font-size: 13px;
+  color: #827148;
+  text-align: center;
+}
+
+/* Break Row */
+.tt-break-row td {
+  background: rgba(239, 231, 214, 0.3);
+}
+.tt-break-cell {
+  text-align: center;
+  font-weight: 600;
+  color: #A5AF79;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+/* Table Cells */
+.tt-cell {
+  width: calc((100% - 100px) / 6);
+  vertical-align: top;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+.tt-cell:hover:not(.empty) {
+  background: #FAFAFA;
+}
+.tt-cell.empty {
+  cursor: default;
+}
+.tt-cell-free {
+  text-align: center;
+  color: rgba(130, 113, 72, 0.4);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 12px;
+  border: 1px dashed rgba(239, 231, 214, 0.8);
+  border-radius: 12px;
+}
+
+.tt-cell-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tt-cell-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(165, 175, 121, 0.15);
+  color: var(--color-primary, #A5AF79);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tt-cell-icon svg { width: 16px; height: 16px; }
+
+.tt-cell-text {
+  display: flex;
+  flex-direction: column;
+}
+.tt-cell-subj {
+  font-weight: 700;
+  font-size: 14px;
+  color: #4F4428;
+}
+
+.tt-cell.is-live {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.tt-cell.is-live .tt-cell-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+}
+
+/* Mobile Accordion View */
+.tt-mobile-view {
+  display: none; /* Hidden on desktop */
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tt-accordion-item {
+  background: #FFFFFF;
+  border-radius: 20px;
+  border: 1px solid var(--color-border, #EFE7D6);
+  box-shadow: 0 4px 12px rgba(130, 113, 72, 0.03);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.tt-accordion-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: #4F4428;
+  cursor: pointer;
+  user-select: none;
+}
+.tt-acc-badge {
+  background: rgba(165, 175, 121, 0.15);
+  color: var(--color-primary, #A5AF79);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  margin-left: 8px;
+}
+.tt-acc-chevron {
+  color: #827148;
+  transition: transform 0.3s ease;
+}
+.tt-accordion-item.active .tt-acc-chevron {
+  transform: rotate(180deg);
+}
+
+.tt-accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease;
+  background: #FAFAFA;
+}
+.tt-accordion-item.active .tt-accordion-body {
+  max-height: 1000px;
+  padding: 16px;
+}
+
+/* Accordion Cards */
+.tt-acc-card {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border, #EFE7D6);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.tt-acc-card:last-child {
+  margin-bottom: 0;
+}
+.tt-acc-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(165, 175, 121, 0.15);
+  color: var(--color-primary, #A5AF79);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tt-acc-info h4 { margin: 0 0 4px 0; font-size: 15px; color: #4F4428; }
+.tt-acc-info p { margin: 0; font-size: 13px; color: #827148; }
+
+.tt-acc-card.is-live {
+  border-color: #EF4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+.tt-acc-card.is-live .tt-acc-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+}
+
+.tt-card-status {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.tt-card-status.live { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
+.tt-card-status.upcoming { background: rgba(250, 204, 21, 0.15); color: #D4A80C; }
+
+.tt-acc-free {
+  text-align: center;
+  padding: 16px;
+  color: rgba(130, 113, 72, 0.6);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Upcoming Panel (Unchanged)
+   ========================================================================== */
+.tt-upcoming-section { margin-top: 16px; }
+.tt-upcoming-section h3 { font-size: 20px; font-weight: 700; color: #4F4428; margin-bottom: 16px; }
+.tt-upcoming-list { display: flex; flex-direction: column; gap: 12px; }
+.tt-upcoming-row { background: #FFFFFF; border-radius: 16px; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s ease; border: 1px solid transparent; }
+.tt-upcoming-row:hover { background: #FAFAFA; transform: translateX(4px); border-color: rgba(239, 231, 214, 0.8); }
+.tt-up-left { display: flex; align-items: center; gap: 16px; }
+.tt-up-icon { width: 40px; height: 40px; border-radius: 12px; background: rgba(232, 160, 124, 0.15); color: var(--color-accent, #E8A07C); display: flex; align-items: center; justify-content: center; }
+.tt-up-details h4 { margin: 0 0 2px 0; font-size: 15px; color: #4F4428; }
+.tt-up-details p { margin: 0; font-size: 13px; color: #827148; }
+.tt-up-right { display: flex; align-items: center; gap: 24px; }
+.tt-up-time { text-align: right; }
+.tt-up-time span { display: block; font-size: 13px; font-weight: 600; color: #4F4428; }
+.tt-up-time small { display: block; font-size: 12px; color: #A5AF79; }
+.tt-up-arrow { color: #EFE7D6; }
+.tt-upcoming-row:hover .tt-up-arrow { color: #A5AF79; }
+
+/* ==========================================================================
+   Modal Styles (Unchanged)
+   ========================================================================== */
+.tt-modal-overlay { position: fixed; inset: 0; background: rgba(79, 68, 40, 0.4); backdrop-filter: blur(4px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.tt-modal-overlay.active { opacity: 1; pointer-events: auto; }
+.tt-modal { background: #FFFFFF; border-radius: 28px; width: 100%; max-width: 440px; padding: 32px; box-shadow: 0 20px 50px rgba(79, 68, 40, 0.15); transform: translateY(20px) scale(0.95); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.tt-modal-overlay.active .tt-modal { transform: translateY(0) scale(1); }
+.tt-modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.tt-modal-title h2 { font-size: 24px; color: #4F4428; margin: 0 0 4px 0; }
+.tt-modal-title p { color: #827148; margin: 0; font-size: 15px; }
+.tt-modal-close { background: rgba(130, 113, 72, 0.1); border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #827148; cursor: pointer; transition: background 0.2s ease; }
+.tt-modal-close:hover { background: rgba(130, 113, 72, 0.2); }
+.tt-modal-body { display: flex; flex-direction: column; gap: 20px; }
+.tt-info-row { display: flex; align-items: flex-start; gap: 12px; }
+.tt-info-row svg { color: #A5AF79; flex-shrink: 0; margin-top: 2px; }
+.tt-info-text h4 { margin: 0 0 4px 0; font-size: 14px; color: #4F4428; }
+.tt-info-text p { margin: 0; font-size: 14px; color: #827148; line-height: 1.5; }
+.tt-sub-text { font-size: 12px !important; color: #A5AF79 !important; margin-top: 4px !important; }
+
+/* ==========================================================================
+   Responsive Display Toggles
+   ========================================================================== */
+@media (max-width: 768px) {
+  .tt-desktop-view {
+    display: none;
+  }
+  .tt-mobile-view {
+    display: flex;
+  }
+
+  .tt-header { flex-direction: column; gap: 16px; }
+  .tt-badge { display: none; }
+  .tt-summary-content { flex-direction: column; align-items: flex-start; }
+  
+  .tt-up-right { gap: 12px; }
+  .tt-up-arrow { display: none; }
+}

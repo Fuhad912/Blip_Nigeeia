@@ -1,0 +1,54 @@
+/* ============================================
+   BLIP — DESIGN TOKENS
+   ============================================ */
+:root {
+  /* Colors - Hex */
+  --color-bg: #FFEED6;
+  --color-primary: #A5AF79;
+  --color-secondary: #E8A07C;
+  --color-text: #827148;
+  --color-card: #FFFFFF;
+  --color-cta: #FACC15;
+  --color-success: #22C55E;
+  --color-error: #EF4444;
+  --color-border: #EFE7D6;
+  
+  --color-primary-dark: #7E8A54;
+  --color-secondary-dark: #D67C55;
+  --color-ink: #4F4428;
+
+  /* Colors - RGB components for alpha blending */
+  --rgb-bg: 255, 238, 214;
+  --rgb-primary: 165, 175, 121;
+  --rgb-secondary: 232, 160, 124;
+  --rgb-text: 130, 113, 72;
+  --rgb-card: 255, 255, 255;
+  --rgb-cta: 250, 204, 21;
+  --rgb-success: 34, 197, 94;
+  --rgb-error: 239, 68, 68;
+  --rgb-border: 239, 231, 214;
+  
+  /* Typography */
+  --font-display: 'Fredoka', 'Poppins', sans-serif;
+  --font-body: 'Nunito', 'Segoe UI', sans-serif;
+
+  /* Border Radius */
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+  --r-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 4px 12px rgba(130, 113, 72, 0.08);
+  --shadow-md: 0 8px 24px rgba(130, 113, 72, 0.12);
+  --shadow-lg: 0 16px 40px rgba(130, 113, 72, 0.16);
+  --shadow-lift: 0 20px 45px rgba(130, 113, 72, 0.22);
+
+  /* Animations & Transitions */
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-fast: 0.15s var(--ease-out);
+  --transition-base: 0.3s var(--ease-out);
+  --transition-slow: 0.5s var(--ease-out);
+}

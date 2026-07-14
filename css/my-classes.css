@@ -1,0 +1,488 @@
+/* ==========================================================================
+   My Classes Page Styles
+   ========================================================================== */
+
+.my-classes-wrapper {
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-text, #827148);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  animation: fadeUp 0.6s ease-out;
+}
+
+/* ==========================================================================
+   Header & Controls
+   ========================================================================== */
+.mc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.mc-header-left h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #4F4428;
+  margin: 0 0 4px 0;
+}
+
+.mc-header-left p {
+  font-size: 16px;
+  color: var(--color-text, #827148);
+  margin: 0;
+}
+
+.mc-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(165, 175, 121, 0.15);
+  color: var(--color-primary, #A5AF79);
+  padding: 8px 16px;
+  border-radius: var(--r-full, 999px);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Search Bar */
+.mc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mc-search-wrapper {
+  position: relative;
+  max-width: 400px;
+}
+
+.mc-search-wrapper svg {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #A5AF79;
+}
+
+.mc-search-input {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border, #EFE7D6);
+  background: #FFFFFF;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #4F4428;
+  box-shadow: 0 4px 15px rgba(130, 113, 72, 0.05);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mc-search-input:focus {
+  outline: none;
+  border-color: var(--color-primary, #A5AF79);
+  box-shadow: 0 4px 20px rgba(165, 175, 121, 0.15);
+}
+
+/* Filter Chips */
+.mc-filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mc-chip {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border, #EFE7D6);
+  color: var(--color-text, #827148);
+  padding: 8px 20px;
+  border-radius: var(--r-full, 999px);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mc-chip:hover {
+  background: #FAFAFA;
+  transform: translateY(-1px);
+}
+
+.mc-chip.active {
+  background: var(--color-primary, #A5AF79);
+  color: #FFFFFF;
+  border-color: var(--color-primary, #A5AF79);
+  box-shadow: 0 4px 12px rgba(165, 175, 121, 0.25);
+}
+
+/* ==========================================================================
+   Class Grid
+   ========================================================================== */
+.mc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* Card Styling */
+.mc-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(130, 113, 72, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.mc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(130, 113, 72, 0.1);
+}
+
+.mc-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.mc-subject-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(165, 175, 121, 0.15);
+  color: var(--color-primary, #A5AF79);
+}
+
+.mc-status {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mc-status.live { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
+.mc-status.live::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%; background: #EF4444;
+  animation: pulse-red 2s infinite;
+}
+.mc-status.upcoming { background: rgba(250, 204, 21, 0.15); color: #D4A80C; }
+.mc-status.recording { background: rgba(34, 197, 94, 0.1); color: #22C55E; }
+.mc-status.completed { background: rgba(130, 113, 72, 0.1); color: #827148; }
+
+.mc-card-body h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #4F4428;
+  margin: 0 0 4px 0;
+}
+
+.mc-teacher {
+  font-size: 14px;
+  color: var(--color-text, #827148);
+  margin: 0 0 12px 0;
+}
+
+.mc-schedule {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #827148;
+}
+
+.mc-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.mc-progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: #827148;
+}
+
+.mc-progress-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: #EFE7D6;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mc-progress-bar-fill {
+  height: 100%;
+  background: var(--color-primary, #A5AF79);
+  border-radius: 3px;
+  width: 0%;
+  transition: width 1s ease-out;
+}
+
+.mc-card-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-primary, .btn-secondary {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: var(--color-primary, #A5AF79);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background: #929D66;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(165, 175, 121, 0.3);
+}
+
+.btn-primary:active { transform: translateY(0); }
+
+.btn-primary.cta-live {
+  background: var(--color-cta, #FACC15);
+  color: #4F4428;
+}
+
+.btn-primary.cta-live:hover {
+  background: #E6BB0C;
+  box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);
+}
+
+.btn-secondary {
+  background: #FAFAFA;
+  color: #827148;
+  border: 1px solid var(--color-border, #EFE7D6);
+}
+
+.btn-secondary:hover {
+  background: #F0EAE1;
+}
+
+/* ==========================================================================
+   Loading Skeletons
+   ========================================================================== */
+.skeleton {
+  background: #F0EAE1;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(90deg, rgba(255,255,255, 0) 0, rgba(255,255,255, 0.4) 20%, rgba(255,255,255, 0.4) 60%, rgba(255,255,255, 0));
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* ==========================================================================
+   Modal Styles
+   ========================================================================== */
+.mc-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(79, 68, 40, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mc-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mc-modal {
+  background: #FFFFFF;
+  border-radius: 28px;
+  width: 100%;
+  max-width: 500px;
+  padding: 32px;
+  box-shadow: 0 20px 50px rgba(79, 68, 40, 0.15);
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mc-modal-overlay.active .mc-modal {
+  transform: translateY(0) scale(1);
+}
+
+.mc-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.mc-modal-title h2 {
+  font-size: 24px;
+  color: #4F4428;
+  margin: 0 0 4px 0;
+}
+
+.mc-modal-title p {
+  color: var(--color-text, #827148);
+  margin: 0;
+  font-size: 15px;
+}
+
+.mc-modal-close {
+  background: rgba(130, 113, 72, 0.1);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #827148;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.mc-modal-close:hover {
+  background: rgba(130, 113, 72, 0.2);
+}
+
+.mc-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mc-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mc-info-row svg {
+  color: #A5AF79;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.mc-info-text h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  color: #4F4428;
+}
+
+.mc-info-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #827148;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .mc-grid { grid-template-columns: repeat(2, 1fr); }
+  .mc-header-left h1 { font-size: 28px; }
+}
+
+@media (max-width: 768px) {
+  .my-classes-wrapper { gap: 24px; }
+
+  .mc-grid { grid-template-columns: 1fr; gap: 16px; }
+  .mc-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .mc-header-left h1 { font-size: 24px; }
+  .mc-header-left p { font-size: 14px; }
+  .mc-badge { display: none; } /* Hide pill on mobile */
+
+  .mc-controls { gap: 14px; }
+  .mc-search-wrapper { max-width: 100%; }
+  .mc-search-input { padding: 14px 14px 14px 44px; font-size: 14px; }
+
+  /* Let filter chips scroll horizontally instead of wrapping into a
+     messy multi-row block */
+  .mc-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .mc-filters::-webkit-scrollbar { display: none; }
+  .mc-chip {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  /* Cards */
+  .mc-card {
+    padding: 18px;
+    border-radius: 20px;
+    gap: 14px;
+  }
+
+  .mc-subject-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+  }
+
+  .mc-card-body h3 {
+    font-size: 17px;
+  }
+
+  .mc-card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-primary, .btn-secondary {
+    width: 100%;
+  }
+
+  /* Modal */
+  .mc-modal {
+    padding: 24px;
+    border-radius: 22px;
+  }
+
+  .mc-modal-title h2 {
+    font-size: 20px;
+  }
+}

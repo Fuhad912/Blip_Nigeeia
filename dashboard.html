@@ -1,0 +1,171 @@
+<div class="dashboard-wrapper">
+  
+  <!-- 1. Greeting Section -->
+  <section class="dash-header">
+    <h1>Good Morning, Fuhad 👋</h1>
+    <p>Ready to learn something new today?</p>
+  </section>
+
+  <!-- 2. Quick Statistics Cards -->
+  <section class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon"><i data-lucide="book-open"></i></div>
+      <div class="stat-info">
+        <span class="stat-value">3</span>
+        <span class="stat-label">Classes Today</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i data-lucide="calendar"></i></div>
+      <div class="stat-info">
+        <span class="stat-value">8</span>
+        <span class="stat-label">Upcoming Classes</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i data-lucide="video"></i></div>
+      <div class="stat-info">
+        <span class="stat-value">24</span>
+        <span class="stat-label">Recorded Lessons</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i data-lucide="flame"></i></div>
+      <div class="stat-info">
+        <span class="stat-value">12</span>
+        <span class="stat-label">Day Streak</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Grid Layout -->
+  <div class="dash-main-grid">
+    
+    <!-- Left Column: Primary Content -->
+    <div class="dash-col">
+      
+      <!-- 3. Next Live Class (Hero Card) -->
+      <section>
+        <h2 class="section-title">Up Next</h2>
+        <div class="hero-card">
+          <div class="hero-badge">
+            <span class="pulse-dot"></span> Live in 15 mins
+          </div>
+          <div class="hero-content">
+            <h2>Mathematics - SS2</h2>
+            <div class="hero-meta">
+              <span><i data-lucide="user" style="width:16px;height:16px;"></i> Mr. Adeyemi</span>
+              <span><i data-lucide="clock" style="width:16px;height:16px;"></i> 09:00 AM</span>
+              <span><i data-lucide="hourglass" style="width:16px;height:16px;"></i> 45 mins</span>
+            </div>
+          </div>
+          <button class="btn-yellow">Join Class</button>
+        </div>
+      </section>
+
+      <!-- 4. Today's Schedule -->
+      <section>
+        <h2 class="section-title">Today's Schedule</h2>
+        <div class="timeline-card">
+          <div class="timeline">
+            <!-- Completed Class -->
+            <div class="timeline-item completed">
+              <div class="timeline-dot"><i data-lucide="check" style="width:20px;height:20px;"></i></div>
+              <div class="timeline-content">
+                <div class="timeline-time">08:00 AM - 08:45 AM</div>
+                <div class="timeline-subject">English Language</div>
+                <div class="timeline-teacher">Mrs. Okafor</div>
+              </div>
+            </div>
+            <!-- Active Class -->
+            <div class="timeline-item active">
+              <div class="timeline-dot"><i data-lucide="book-open" style="width:20px;height:20px;"></i></div>
+              <div class="timeline-content">
+                <div class="timeline-time">09:00 AM - 09:45 AM</div>
+                <div class="timeline-subject">Mathematics</div>
+                <div class="timeline-teacher">Mr. Adeyemi</div>
+              </div>
+            </div>
+            <!-- Upcoming Class -->
+            <div class="timeline-item">
+              <div class="timeline-dot"><i data-lucide="circle" style="width:16px;height:16px; color:#A5AF79;"></i></div>
+              <div class="timeline-content">
+                <div class="timeline-time">10:30 AM - 11:15 AM</div>
+                <div class="timeline-subject">Physics</div>
+                <div class="timeline-teacher">Dr. Bello</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Continue Learning -->
+      <section>
+        <h2 class="section-title">Continue Learning</h2>
+        <div class="learning-card">
+          <div class="learning-thumb">
+            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Chemistry Thumbnail" style="width:100%; height:100%; object-fit:cover; opacity:0.8;">
+          </div>
+          <div class="learning-info">
+            <div class="learning-title">Introduction to Organic Chemistry</div>
+            <div class="learning-meta">Chemistry • Miss Tolu</div>
+            <div class="progress-wrap">
+              <div class="progress-bar" style="width: 65%;"></div>
+            </div>
+            <div style="font-size: 12px; color: #827148; margin-top: 6px;">65% Completed</div>
+          </div>
+          <button class="learning-action">Continue</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Right Column: Secondary Content -->
+    <div class="dash-col">
+      
+      <!-- 6. Announcements -->
+      <section>
+        <h2 class="section-title">Announcements</h2>
+        <div class="notices-wrapper">
+          <div class="notice-card exam">
+            <div class="notice-header">
+              <span class="notice-tag exam">Exam</span>
+              <span class="notice-date">Tomorrow</span>
+            </div>
+            <div class="notice-title">Mathematics Mock Exam</div>
+            <div class="notice-desc">Make sure you have your scientific calculators ready for tomorrow's mock session.</div>
+          </div>
+          
+          <div class="notice-card holiday">
+            <div class="notice-header">
+              <span class="notice-tag holiday">Holiday</span>
+              <span class="notice-date">Next Week</span>
+            </div>
+            <div class="notice-title">Mid-Term Break</div>
+            <div class="notice-desc">Classes will be paused from Thursday to Friday for the mid-term break. Enjoy!</div>
+          </div>
+
+          <div class="notice-card">
+            <div class="notice-header">
+              <span class="notice-tag">System</span>
+              <span class="notice-date">Just Now</span>
+            </div>
+            <div class="notice-title">Platform Update</div>
+            <div class="notice-desc">We've added a new interactive whiteboard feature to live classes.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Motivational Quote -->
+      <section>
+        <div class="quote-card">
+          <span class="quote-icon">"</span>
+          <div class="quote-text">Small steps every day lead to big success.</div>
+          <div class="quote-author">— Blip Team</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+</div>

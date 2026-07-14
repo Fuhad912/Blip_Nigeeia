@@ -1,0 +1,73 @@
+<div class="my-classes-wrapper">
+  
+  <!-- Header -->
+  <section class="mc-header">
+    <div class="mc-header-left">
+      <h1>My Classes</h1>
+      <p>Manage your enrolled subjects and continue learning.</p>
+    </div>
+    <div class="mc-badge">
+      <i data-lucide="book-open"></i>
+      8 Active Classes
+    </div>
+  </section>
+
+  <!-- Controls (Search & Filters) -->
+  <section class="mc-controls">
+    <div class="mc-search-wrapper">
+      <i data-lucide="search"></i>
+      <input type="text" id="mcSearchInput" class="mc-search-input" placeholder="Search classes...">
+    </div>
+    <div class="mc-filters" id="mcFilters">
+      <button class="mc-chip active" data-filter="all">All</button>
+      <button class="mc-chip" data-filter="live">Live Today</button>
+      <button class="mc-chip" data-filter="recording">Recordings</button>
+      <button class="mc-chip" data-filter="upcoming">Upcoming</button>
+      <button class="mc-chip" data-filter="completed">Completed</button>
+    </div>
+  </section>
+
+  <!-- Dynamic Grid Container -->
+  <section class="mc-grid" id="mcGridContainer">
+    <!-- Cards will be injected here via my-classes.js -->
+  </section>
+
+  <!-- Modal Container -->
+  <div class="mc-modal-overlay" id="mcDetailsModal">
+    <div class="mc-modal">
+      <div class="mc-modal-header">
+        <div class="mc-modal-title">
+          <h2 id="modalSubject">Subject Details</h2>
+          <p id="modalTeacher">Teacher Name</p>
+        </div>
+        <button class="mc-modal-close" id="mcCloseModal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="mc-modal-body">
+        <div class="mc-info-row">
+          <i data-lucide="info"></i>
+          <div class="mc-info-text">
+            <h4>Description</h4>
+            <p>This class covers the fundamental principles of the subject tailored for secondary school curriculum. Expect engaging interactive sessions.</p>
+          </div>
+        </div>
+        <div class="mc-info-row">
+          <i data-lucide="calendar"></i>
+          <div class="mc-info-text">
+            <h4>Weekly Schedule</h4>
+            <p id="modalSchedule">Mondays & Wednesdays • 4:00 PM</p>
+          </div>
+        </div>
+        <div class="mc-info-row">
+          <i data-lucide="video"></i>
+          <div class="mc-info-text">
+            <h4>Platform</h4>
+            <p>Google Meet (Links are provided 15 mins before class)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

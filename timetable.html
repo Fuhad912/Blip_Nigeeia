@@ -1,0 +1,104 @@
+<div class="timetable-wrapper fade-in">
+  
+  <!-- Header -->
+  <section class="tt-header">
+    <div class="tt-header-left">
+      <h1>Timetable</h1>
+      <p>View your weekly learning schedule at a glance.</p>
+    </div>
+    <div class="tt-badge">
+      <i data-lucide="calendar-days"></i>
+      This Week
+    </div>
+  </section>
+
+  <!-- Today Summary Card -->
+  <section class="tt-summary-card">
+    <div class="tt-summary-content">
+      <div class="tt-summary-info">
+        <h2 id="ttSummaryHeading">Today's Classes</h2>
+        <div class="tt-summary-stats">
+          <div class="tt-stat">
+            <span class="tt-stat-label">Total</span>
+            <span class="tt-stat-value" id="ttTotalToday">--</span>
+          </div>
+          <div class="tt-stat">
+            <span class="tt-stat-label">Next</span>
+            <span class="tt-stat-value" id="ttNextClass">--</span>
+          </div>
+          <div class="tt-stat">
+            <span class="tt-stat-label">Starts in</span>
+            <span class="tt-stat-value" id="ttStartsIn">--</span>
+          </div>
+        </div>
+      </div>
+      <div class="tt-summary-action">
+        <button class="btn-primary" id="ttJoinNextBtn" onclick="window.open('https://meet.google.com/mock-link', '_blank')">
+          Join Next Class
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- View Switcher -->
+  <section class="tt-view-switcher">
+    <div class="segmented-control">
+      <button class="segment-btn active" data-view="week">Week View</button>
+      <button class="segment-btn" data-view="today">Today</button>
+    </div>
+  </section>
+
+  <!-- Timetable Grid Container -->
+  <section class="tt-grid-container" id="ttGridContainer">
+    <!-- Grid injected via JS -->
+  </section>
+
+  <!-- Upcoming Panel Container -->
+  <section class="tt-upcoming-section">
+    <h3>Upcoming Classes</h3>
+    <div class="tt-upcoming-list" id="ttUpcomingContainer">
+      <!-- List injected via JS -->
+    </div>
+  </section>
+
+  <!-- Timetable Detail Modal -->
+  <div class="tt-modal-overlay" id="ttDetailsModal">
+    <div class="tt-modal">
+      <div class="tt-modal-header">
+        <div class="tt-modal-title">
+          <h2 id="ttModalSubject">Subject</h2>
+          <p id="ttModalTeacher">Teacher</p>
+        </div>
+        <button class="tt-modal-close" id="ttCloseModal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="tt-modal-body">
+        <div class="tt-info-row">
+          <i data-lucide="info"></i>
+          <div class="tt-info-text">
+            <h4>Description</h4>
+            <p>Interactive learning session following the official curriculum syllabus.</p>
+          </div>
+        </div>
+        <div class="tt-info-row">
+          <i data-lucide="clock"></i>
+          <div class="tt-info-text">
+            <h4>Time & Duration</h4>
+            <p id="ttModalTime">--</p>
+            <p class="tt-sub-text">Estimated: 45 minutes</p>
+          </div>
+        </div>
+        <div class="tt-info-row">
+          <i data-lucide="video"></i>
+          <div class="tt-info-text">
+            <h4>Meeting Platform</h4>
+            <p>Google Meet</p>
+            <p class="tt-sub-text">Recording will be available 2 hours after class.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

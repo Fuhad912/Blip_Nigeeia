@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blip | Learning Just Got More Fun</title>
+  <meta name="description" content="Blip is Nigeria's upcoming virtual classroom for JS1–SS3 students. Live classes, amazing teachers, real results.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400..700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* ============================================
+       BLIP — DESIGN TOKENS
+       ============================================ */
+    :root{
+      --bg:        255,238,214;   /* warm cream */
+      --primary:   165,175,121;   /* sage/olive green */
+      --secondary: 232,160,124;   /* soft terracotta */
+      --text:      130,113,72;    /* warm brown */
+
+      --primary-dark:   126,138, 84;
+      --primary-light:  198,206,163;
+      --secondary-dark: 214,124, 85;
+      --secondary-light:246,201,176;
+      --cream-white:    255,250,240;
+      --ink:            79, 68, 40;
+
+      --r-sm: 14px;
+      --r-md: 22px;
+      --r-lg: 28px;
+      --r-xl: 36px;
+
+      --shadow-soft: 0 10px 30px rgba(130,113,72,0.14);
+      --shadow-lift: 0 20px 45px rgba(130,113,72,0.22);
+
+      --ease: cubic-bezier(.22,1,.36,1);
+      --font-display: 'Fredoka', 'Segoe UI', sans-serif;
+      --font-body: 'Nunito', 'Segoe UI', sans-serif;
+    }
+
+    *,*::before,*::after{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      *,*::before,*::after{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+    }
+
+    body{
+      margin:0;
+      background: rgb(var(--bg));
+      color: rgb(var(--text));
+      font-family: var(--font-body);
+      font-weight:600;
+      line-height:1.55;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    h1,h2,h3,h4{
+      font-family: var(--font-display);
+      color: rgb(var(--ink));
+      margin:0 0 .5em 0;
+      font-weight:600;
+      line-height:1.12;
+      letter-spacing:-0.01em;
+    }
+
+    p{ margin:0 0 1em 0; }
+    a{ color:inherit; text-decoration:none; }
+    img,svg{ display:block; max-width:100%; }
+    button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+    ul{ margin:0; padding:0; list-style:none; }
+
+    ::selection{ background: rgb(var(--secondary)); color:#fff; }
+
+    :focus-visible{
+      outline: 3px solid rgb(var(--secondary-dark));
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+
+    .container{
+      width:100%;
+      max-width:1200px;
+      margin:0 auto;
+      padding:0 20px;
+    }
+    @media(min-width:768px){ .container{ padding:0 40px; } }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-family:var(--font-display);
+      font-size:13px;
+      font-weight:500;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      color: rgb(var(--secondary-dark));
+      background: rgba(var(--secondary),0.16);
+      padding:7px 16px 7px 12px;
+      border-radius:999px;
+      margin-bottom:18px;
+    }
+
+    .section{ position:relative; padding:88px 0; }
+    .section-head{ max-width:640px; margin:0 auto 52px; text-align:center; }
+    .section-head h2{ font-size:clamp(28px,4vw,42px); }
+    .section-head p{ font-size:18px; color:rgb(var(--text)); opacity:.9; }
+
+    /* ============================================
+       BUTTONS
+       ============================================ */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      font-family:var(--font-display);
+      font-weight:500;
+      font-size:16px;
+      padding:15px 28px;
+      border-radius:999px;
+      transition: transform .35s var(--ease), box-shadow .35s var(--ease), background .3s ease;
+      white-space:nowrap;
+      position:relative;
+    }
+    .btn-primary{
+      background: rgb(var(--primary));
+      color: rgb(var(--cream-white));
+      box-shadow: 0 8px 0 rgb(var(--primary-dark)), var(--shadow-soft);
+    }
+    .btn-primary:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 11px 0 rgb(var(--primary-dark)), var(--shadow-lift);
+    }
+    .btn-primary:active{ transform: translateY(2px); box-shadow: 0 4px 0 rgb(var(--primary-dark)); }
+
+    .btn-secondary{
+      background: rgba(255,255,255,0.5);
+      color: rgb(var(--secondary-dark));
+      border: 2px solid rgb(var(--secondary));
+      backdrop-filter: blur(6px);
+    }
+    .btn-secondary:hover{
+      background: rgb(var(--secondary));
+      color:#fff;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-glow{ box-shadow: 0 8px 0 rgb(var(--primary-dark)), 0 0 0 rgba(165,175,121,0.5); animation: glowPulse 2.6s ease-in-out infinite; }
+    @keyframes glowPulse{
+      0%,100%{ box-shadow: 0 8px 0 rgb(var(--primary-dark)), 0 0 18px rgba(165,175,121,0.0); }
+      50%{ box-shadow: 0 8px 0 rgb(var(--primary-dark)), 0 0 22px rgba(165,175,121,0.55); }
+    }
+
+    .btn-sm{ padding:10px 20px; font-size:14px; }
+
+    /* --- hero teacher button styled like primary but orange/terracotta --- */
+    .btn-teacher-hero {
+      background: rgb(var(--secondary));
+      color: #fff;
+      box-shadow: 0 8px 0 rgb(var(--secondary-dark)), var(--shadow-soft);
+    }
+    .btn-teacher-hero:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 11px 0 rgb(var(--secondary-dark)), var(--shadow-lift);
+      background: rgb(var(--secondary-dark));
+    }
+    .btn-teacher-hero:active {
+      transform: translateY(2px);
+      box-shadow: 0 4px 0 rgb(var(--secondary-dark));
+    }
+
+    /* ============================================
+       NAVBAR
+       ============================================ */
+    .navbar{
+      position:sticky; top:0; z-index:200;
+      padding:16px 0;
+      transition: box-shadow .35s ease, padding .35s ease, background .35s ease;
+    }
+    .navbar::before{
+      content:''; position:absolute; inset:0;
+      background: rgba(255,238,214,0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index:-1;
+    }
+    .navbar.scrolled{ box-shadow: 0 6px 24px rgba(130,113,72,0.12); padding:10px 0; }
+    .nav-inner{ display:flex; align-items:center; justify-content:space-between; gap:24px; }
+
+    .logo{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-size:23px; color: rgb(var(--ink)); }
+    .logo-mark{ width:38px; height:38px; flex-shrink:0; }
+    .logo-mark svg{ width:100%; height:100%; }
+
+    .nav-links{ display:none; align-items:center; gap:6px; }
+    .nav-links a{
+      font-family:var(--font-display); font-weight:400; font-size:15.5px;
+      padding:10px 16px; border-radius:999px; color:rgb(var(--text));
+      transition: background .25s ease, color .25s ease;
+    }
+    .nav-links a:hover{ background: rgba(165,175,121,0.16); color:rgb(var(--primary-dark)); }
+
+    @media(min-width:960px){ .nav-links{ display:flex; } }
+
+    .nav-cta{ display:none; }
+    @media(min-width:960px){ .nav-cta{ display:inline-flex; } }
+
+    .nav-burger{
+      display:flex; flex-direction:column; gap:5px; padding:10px; border-radius:10px;
+    }
+    @media(min-width:960px){ .nav-burger{ display:none; } }
+    .nav-burger span{ width:24px; height:3px; border-radius:3px; background:rgb(var(--ink)); transition: transform .3s ease, opacity .3s ease; }
+    .nav-burger.open span:nth-child(1){ transform: translateY(8px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2){ opacity:0; }
+    .nav-burger.open span:nth-child(3){ transform: translateY(-8px) rotate(-45deg); }
+
+    .mobile-menu{
+      max-height:0; overflow:hidden; transition: max-height .4s var(--ease);
+    }
+    .mobile-menu.open{ max-height:420px; }
+    .mobile-menu-inner{ display:flex; flex-direction:column; gap:4px; padding:14px 0 8px; }
+    .mobile-menu-inner a{ padding:12px 8px; font-family:var(--font-display); border-radius:12px; }
+    .mobile-menu-inner a:hover{ background:rgba(165,175,121,0.14); }
+    .mobile-menu .btn{ margin-top:8px; width:100%; }
+
+    /* ============================================
+       FLOATING DECOR (shared)
+       ============================================ */
+    .decor{ position:absolute; pointer-events:none; z-index:0; opacity:.9; will-change: transform, opacity; }
+    .float-a{ animation: floatA 6s ease-in-out infinite; will-change: transform; }
+    .float-b{ animation: floatB 7.5s ease-in-out infinite; will-change: transform; }
+    .float-c{ animation: floatC 5.5s ease-in-out infinite; will-change: transform; }
+    .spin-slow{ animation: spin 14s linear infinite; will-change: transform; }
+    .spin-slower{ animation: spin 22s linear infinite; will-change: transform; }
+
+    @keyframes floatA{ 0%,100%{ transform:translateY(0px) rotate(-4deg);} 50%{ transform:translateY(-18px) rotate(4deg);} }
+    @keyframes floatB{ 0%,100%{ transform:translateY(0px) translateX(0px);} 50%{ transform:translateY(14px) translateX(8px);} }
+    @keyframes floatC{ 0%,100%{ transform:translateY(0px) scale(1);} 50%{ transform:translateY(-10px) scale(1.06);} }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
+    @keyframes twinkle{ 0%,100%{ opacity:.35; transform:scale(.85);} 50%{ opacity:1; transform:scale(1.1);} }
+    .twinkle{ animation: twinkle 2.4s ease-in-out infinite; will-change: transform, opacity; }
+
+    /* Organic blob background shapes */
+    .blob-bg{ position:absolute; border-radius:50%; filter:blur(2px); z-index:0; }
+
+    /* ============================================
+       HERO
+       ============================================ */
+    .hero{
+      position:relative;
+      padding:56px 0 90px;
+      overflow:hidden;
+    }
+    .hero-blob-1{ width:520px; height:520px; top:-180px; right:-160px; background: radial-gradient(circle at 30% 30%, rgba(165,175,121,0.35), rgba(165,175,121,0.06)); border-radius:44% 56% 62% 38% / 42% 40% 60% 58%; }
+    .hero-blob-2{ width:360px; height:360px; bottom:-140px; left:-120px; background: radial-gradient(circle at 40% 40%, rgba(232,160,124,0.32), rgba(232,160,124,0.05)); border-radius:60% 40% 45% 55% / 55% 60% 40% 45%; }
+
+    .hero-grid{
+      position:relative; z-index:2;
+      display:grid; grid-template-columns:1fr; gap:48px; align-items:center;
+    }
+    @media(min-width:960px){ .hero-grid{ grid-template-columns:1.05fr 0.95fr; gap:40px; } }
+
+    .hero-copy h1{
+      font-size:clamp(36px,6vw,64px);
+      max-width:11ch;
+    }
+    .hero-copy h1 .accent{ color: rgb(var(--secondary-dark)); position:relative; display:inline-block; }
+    .hero-copy h1 .accent svg{ position:absolute; left:0; bottom:-6px; width:100%; height:auto; z-index:-1; }
+
+    .hero-copy p.lead{
+      font-size:19px; max-width:46ch; color:rgb(var(--text)); opacity:.95;
+    }
+    .hero-actions{ display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; }
+
+    .hero-trust{ display:flex; align-items:center; gap:14px; margin-top:38px; }
+    .hero-trust .avatars{ display:flex; }
+    .hero-trust .avatars span{
+      width:38px; height:38px; border-radius:50%; border:3px solid rgb(var(--bg));
+      margin-left:-12px; display:flex; align-items:center; justify-content:center;
+      font-family:var(--font-display); font-size:13px; color:#fff;
+    }
+    .hero-trust .avatars span:first-child{ margin-left:0; }
+    .hero-trust small{ font-family:var(--font-body); font-weight:700; color:rgb(var(--text)); font-size:14px; }
+
+    .hero-art{ position:relative; height:420px; z-index:2; }
+    @media(min-width:960px){ .hero-art{ height:480px; } }
+    .hero-art .float-item{ position:absolute; }
+
+    /* ============================================
+       MASCOT (signature element) — smiling blob w/ cap
+       ============================================ */
+    .mascot{ display:block; }
+    .mascot .cheek{ opacity:.55; }
+
+    /* ============================================
+       WHY SECTION — cards
+       ============================================ */
+    .love-grid{
+      display:grid; grid-template-columns:1fr; gap:26px; position:relative; z-index:1;
+    }
+    @media(min-width:640px){ .love-grid{ grid-template-columns:1fr 1fr; } }
+    @media(min-width:1080px){ .love-grid{ grid-template-columns:repeat(4,1fr); } }
+
+    .love-card{
+      background: rgb(var(--cream-white));
+      border-radius: var(--r-lg);
+      padding:32px 26px 28px;
+      box-shadow: var(--shadow-soft);
+      position:relative;
+      overflow:hidden;
+      transform-style:preserve-3d;
+      transition: transform .12s linear, box-shadow .35s ease;
+      opacity:0; transform:translateY(28px);
+    }
+    .love-card.in-view{ animation: cardIn .7s var(--ease) forwards; }
+    @keyframes cardIn{ to{ opacity:1; transform:translateY(0);} }
+
+    .love-card:hover{ box-shadow: var(--shadow-lift); }
+    .love-card .icon-wrap{
+      width:64px; height:64px; border-radius:20px;
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:20px;
+      transition: transform .4s var(--ease);
+    }
+    .love-card:hover .icon-wrap{ transform: rotate(-8deg) scale(1.08); }
+    .love-card:nth-child(1) .icon-wrap{ background: rgba(165,175,121,0.18); }
+    .love-card:nth-child(2) .icon-wrap{ background: rgba(232,160,124,0.2); }
+    .love-card:nth-child(3) .icon-wrap{ background: rgba(165,175,121,0.18); }
+    .love-card:nth-child(4) .icon-wrap{ background: rgba(232,160,124,0.2); }
+    .love-card .icon-wrap svg{ width:32px; height:32px; }
+    .love-card h3{ font-size:20px; margin-bottom:8px; }
+    .love-card p{ font-size:15px; color:rgb(var(--text)); opacity:.9; margin-bottom:0; }
+    .love-card .card-star{ position:absolute; top:18px; right:18px; opacity:.5; }
+
+    /* ============================================
+       PARENTS SECTION
+       ============================================ */
+    .parents-section{ position:relative; overflow:hidden; }
+    .parents-panel{
+      position:relative; z-index:1;
+      background: linear-gradient(135deg, rgba(165,175,121,0.92), rgba(126,138,84,0.94));
+      border-radius: var(--r-xl);
+      padding:56px 32px;
+      color:#fff;
+      overflow:hidden;
+      box-shadow: var(--shadow-lift);
+    }
+    @media(min-width:768px){ .parents-panel{ padding:64px 60px; } }
+    .parents-panel::before{
+      content:''; position:absolute; inset:0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Ccircle cx='2' cy='2' r='2' fill='rgba(255,255,255,0.12)'/%3E%3C/svg%3E");
+      opacity:.5;
+    }
+    .parents-grid{ position:relative; z-index:1; display:grid; grid-template-columns:1fr; gap:44px; align-items:center; }
+    @media(min-width:900px){ .parents-grid{ grid-template-columns:1fr 1fr; } }
+    .parents-copy .eyebrow{ background: rgba(255,255,255,0.18); color:#fff; }
+    .parents-copy h2{ color:#fff; font-size:clamp(26px,3.6vw,38px); }
+    .parents-copy p.lead{ color:rgba(255,255,255,0.92); font-size:17px; max-width:48ch; }
+
+    .check-list{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:28px; }
+    @media(min-width:520px){ .check-list{ grid-template-columns:1fr 1fr; } }
+    .check-item{
+      display:flex; align-items:center; gap:12px;
+      background: rgba(255,255,255,0.14);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: var(--r-md);
+      padding:14px 16px;
+      transition: transform .3s var(--ease), background .3s ease;
+    }
+    .check-item:hover{ transform: translateY(-4px); background: rgba(255,255,255,0.22); }
+    .check-item .tick{
+      width:28px; height:28px; border-radius:50%; background:rgb(var(--secondary));
+      display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    }
+    .check-item span.label{ font-family:var(--font-display); font-weight:500; font-size:15px; }
+
+    .parents-art{ position:relative; height:280px; display:flex; align-items:center; justify-content:center; }
+
+    /* ============================================
+       WAITLIST SECTION
+       ============================================ */
+    .waitlist-section{ position:relative; overflow:hidden; }
+    .waitlist-wrap{ display:flex; justify-content:center; position:relative; z-index:1; }
+    .waitlist-card{
+      width:100%; max-width:640px;
+      background: rgba(255,250,240,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: var(--r-xl);
+      padding:38px 26px;
+      box-shadow: var(--shadow-lift);
+      position:relative;
+    }
+    @media(min-width:640px){ .waitlist-card{ padding:48px 48px; } }
+
+    .waitlist-head{ text-align:center; margin-bottom:28px; }
+    .waitlist-head h2{ font-size:clamp(24px,3.4vw,32px); }
+    .waitlist-head p{ margin-bottom:0; }
+
+    .form-grid{ display:grid; grid-template-columns:1fr; gap:16px; }
+    @media(min-width:560px){ .form-grid{ grid-template-columns:1fr 1fr; } }
+    .field{ display:flex; flex-direction:column; gap:6px; }
+    .field.full{ grid-column:1 / -1; }
+    .field label{ font-family:var(--font-display); font-size:14px; font-weight:500; color:rgb(var(--ink)); padding-left:4px; }
+    .field input, .field select{
+      font-family:var(--font-body); font-weight:700; font-size:15px;
+      padding:14px 16px; border-radius: var(--r-sm);
+      border:2px solid rgba(165,175,121,0.35);
+      background: rgb(var(--cream-white));
+      color: rgb(var(--ink));
+      transition: border-color .25s ease, box-shadow .25s ease, transform .2s ease;
+      width:100%;
+      appearance:none;
+      -webkit-appearance:none;
+    }
+    .field select{
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23827148' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 16px center;
+      padding-right:40px;
+    }
+    .field input::placeholder{ color: rgba(130,113,72,0.45); font-weight:600; }
+    .field input:focus, .field select:focus{
+      outline:none; border-color: rgb(var(--secondary));
+      box-shadow: 0 0 0 4px rgba(232,160,124,0.22);
+    }
+
+    .role-toggle{ display:flex; gap:10px; }
+    .role-btn{
+      flex:1; padding:13px; border-radius: var(--r-sm);
+      border:2px solid rgba(165,175,121,0.35); background:rgb(var(--cream-white));
+      font-family:var(--font-display); font-size:14.5px; color:rgb(var(--text));
+      transition: all .25s ease;
+    }
+    .role-btn.active{ background: rgb(var(--primary)); border-color:rgb(var(--primary)); color:#fff; box-shadow: var(--shadow-soft); }
+
+    .waitlist-card .btn-primary{ width:100%; margin-top:22px; font-size:17px; }
+    .form-note{ text-align:center; font-size:13px; color:rgb(var(--text)); opacity:.75; margin:14px 0 0; }
+
+    /* success state */
+    .success-state{
+      display:none; text-align:center; padding:30px 10px 10px;
+    }
+    .success-state.show{ display:block; animation: fadeUp .5s var(--ease); }
+    @keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+    .checkmark-wrap{ width:90px; height:90px; margin:0 auto 20px; }
+    .checkmark-circle{ stroke: rgb(var(--primary)); stroke-width:4; fill:rgba(165,175,121,0.12); }
+    .checkmark-check{ stroke: rgb(var(--primary)); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+    .checkmark-circle{
+      stroke-dasharray:166; stroke-dashoffset:166;
+      animation: circleDraw .6s ease forwards;
+    }
+    .checkmark-check{
+      stroke-dasharray:48; stroke-dashoffset:48;
+      animation: checkDraw .35s .55s ease forwards;
+    }
+    @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
+    @keyframes checkDraw{ to{ stroke-dashoffset:0; } }
+    .success-state h3{ font-size:24px; }
+    .success-state p{ max-width:38ch; margin-left:auto; margin-right:auto; }
+
+    .confetti-canvas{ position:fixed; inset:0; pointer-events:none; z-index:500; }
+
+    /* ============================================
+       TEACHER SECTION
+       ============================================ */
+    .teacher-section{ position:relative; }
+    .teacher-grid{ display:grid; grid-template-columns:1fr; gap:44px; align-items:center; }
+    @media(min-width:960px){ .teacher-grid{ grid-template-columns:0.95fr 1.05fr; } }
+    .teacher-art{ position:relative; height:340px; display:flex; align-items:center; justify-content:center; }
+    .teacher-copy .eyebrow{ }
+    .teacher-card{
+      background: rgb(var(--cream-white));
+      border-radius: var(--r-xl);
+      padding:30px 24px;
+      box-shadow: var(--shadow-soft);
+    }
+    @media(min-width:640px){ .teacher-card{ padding:36px 34px; } }
+    .teacher-card .form-grid{ margin-top:6px; }
+    .teacher-card textarea{
+      font-family:var(--font-body); font-weight:700; font-size:15px;
+      padding:14px 16px; border-radius: var(--r-sm);
+      border:2px solid rgba(165,175,121,0.35);
+      background: rgb(var(--cream-white)); color:rgb(var(--ink));
+      resize:vertical; min-height:90px; width:100%;
+    }
+    .teacher-card textarea:focus{ outline:none; border-color: rgb(var(--secondary)); box-shadow: 0 0 0 4px rgba(232,160,124,0.22); }
+    .teacher-card .btn{ margin-top:18px; width:100%; }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .footer{
+      position:relative; overflow:hidden;
+      background: rgb(var(--ink));
+      color: rgb(var(--secondary-light));
+      padding:64px 0 28px;
+      margin-top:40px;
+    }
+    .footer-blob{ position:absolute; width:400px; height:400px; border-radius:50%; background: radial-gradient(circle, rgba(165,175,121,0.18), transparent 70%); top:-160px; left:-100px; }
+    .footer-grid{
+      position:relative; z-index:1;
+      display:grid; grid-template-columns:1fr; gap:36px;
+    }
+    @media(min-width:768px){ .footer-grid{ grid-template-columns:1.3fr 1fr 1fr 1fr; } }
+    .footer-brand .logo{ color:#fff; }
+    .footer-brand p{ color: rgba(246,201,176,0.75); font-size:14.5px; max-width:34ch; margin-top:10px; }
+    .footer h4{ color:#fff; font-size:15px; margin-bottom:14px; }
+    .footer-links li{ margin-bottom:10px; }
+    .footer-links a{ color: rgba(246,201,176,0.8); font-size:14.5px; transition: color .2s ease; }
+    .footer-links a:hover{ color:#fff; }
+
+    .footer-bottom{
+      position:relative; z-index:1;
+      margin-top:48px; padding-top:24px;
+      border-top:1px solid rgba(255,255,255,0.12);
+      display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;
+      font-size:13.5px; color: rgba(246,201,176,0.65);
+    }
+
+    /* ============================================
+       UTILITIES
+       ============================================ */
+    .reveal{ opacity:0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal.in-view{ opacity:1; transform:translateY(0); }
+    .text-center{ text-align:center; }
+    .center-actions{ display:flex; justify-content:center; }
+
+    .mid-cta{ text-align:center; padding:70px 0; position:relative; }
+    .mid-cta h2{ font-size:clamp(24px,3.6vw,34px); max-width:16ch; margin:0 auto 22px; }
+
+    /* Form Loading & Error States */
+    .form-error {
+      display: none;
+      background: rgba(232,160,124,0.15);
+      color: rgb(var(--secondary-dark));
+      border: 1px solid rgba(232,160,124,0.3);
+      padding: 12px 16px;
+      border-radius: var(--r-sm);
+      margin-top: 14px;
+      font-size: 14.5px;
+      text-align: center;
+      font-weight: 700;
+      animation: fadeUp 0.4s var(--ease);
+    }
+    .form-error.show {
+      display: block;
+    }
+
+    .btn.loading {
+      pointer-events: none;
+      opacity: 0.8;
+    }
+    .btn.loading::after {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      display: inline-block;
+      animation: btnSpinner 0.8s linear infinite;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    @keyframes btnSpinner {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Mobile Performance Optimizations */
+    @media (max-width: 768px) {
+      .navbar::before {
+        background: rgba(255,238,214,0.98);
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+      .check-item {
+        background: rgba(255,255,255,0.25);
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+      .waitlist-card {
+        background: rgb(var(--cream-white));
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+      .decor, .mascot, .float-item {
+        animation: none !important;
+        animation-duration: 0s !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================
+     NAVBAR
+     ============================================ -->
+<header class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <a href="#top" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="26" r="17" fill="rgb(165,175,121)"/>
+          <path d="M24 6 L38 12 L24 18 L10 12 Z" fill="rgb(232,160,124)"/>
+          <path d="M14 14 V22" stroke="rgb(232,160,124)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="19" cy="25" r="2.4" fill="#4F4428"/>
+          <circle cx="29" cy="25" r="2.4" fill="#4F4428"/>
+          <path d="M18 32c2.5 3 9.5 3 12 0" stroke="#4F4428" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        </svg>
+      </span>
+      Blip
+    </a>
+
+    <nav class="nav-links">
+      <a href="#why">Why Blip</a>
+      <a href="#parents">For Parents</a>
+      <a href="#teachers">For Teachers</a>
+      <a href="#waitlist">Waitlist</a>
+    </nav>
+
+    <a href="#waitlist" class="btn btn-primary nav-cta btn-sm">Join Waitlist ✨</a>
+
+    <button class="nav-burger" id="burger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="container mobile-menu-inner">
+      <a href="#why">Why Blip</a>
+      <a href="#parents">For Parents</a>
+      <a href="#teachers">For Teachers</a>
+      <a href="#waitlist">Waitlist</a>
+      <a href="#waitlist" class="btn btn-primary">Join Waitlist ✨</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================
+     HERO
+     ============================================ -->
+<section class="hero" id="top">
+  <div class="blob-bg hero-blob-1"></div>
+  <div class="blob-bg hero-blob-2"></div>
+
+  <div class="container hero-grid">
+    <div class="hero-copy reveal in-view">
+      <div class="eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4 5.7 21l2.3-7.2-6-4.6h7.6z" fill="rgb(232,160,124)"/></svg>
+        Coming Soon to Nigeria
+      </div>
+      <h1>Learning Just Got <span class="accent">More Fun.<svg viewBox="0 0 220 18" preserveAspectRatio="none"><path d="M2 13 C60 2, 160 2, 218 12" stroke="rgb(232,160,124)" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span></h1>
+      <p class="lead">Blip is Nigeria’s new virtual classroom for JS1–SS3 students. Think live classes, teachers who actually get it, and lessons that stick.</p>
+
+      <div class="hero-actions">
+        <a href="#waitlist" class="btn btn-primary btn-glow">Join Waitlist</a>
+        <a href="#teachers" class="btn btn-teacher-hero">Become a Teacher</a>
+      </div>
+
+      <div class="hero-trust">
+        <div class="avatars">
+          <span style="background:rgb(165,175,121)">JS</span>
+          <span style="background:rgb(232,160,124)">SS</span>
+          <span style="background:rgb(126,138,84)">👩🏽‍🏫</span>
+        </div>
+        <small>Built with Nigerian students &amp; teachers</small>
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <!-- Central mascot -->
+      <div class="float-item float-a" style="left:50%; top:14%; transform:translateX(-50%); width:230px;">
+        <svg class="mascot" viewBox="0 0 220 220" width="230">
+          <ellipse cx="110" cy="205" rx="70" ry="10" fill="rgba(130,113,72,0.10)"/>
+          <path d="M110 30c48 0 78 34 78 82s-34 84-78 84-78-36-78-84 30-82 78-82z" fill="rgb(165,175,121)"/>
+          <path d="M60 46 L110 24 L160 46 L110 64Z" fill="rgb(232,160,124)"/>
+          <rect x="106" y="64" width="8" height="26" fill="rgb(232,160,124)"/>
+          <circle cx="86" cy="118" r="9" fill="#4F4428"/>
+          <circle cx="134" cy="118" r="9" fill="#4F4428"/>
+          <circle cx="89" cy="115" r="2.4" fill="#fff"/>
+          <circle cx="137" cy="115" r="2.4" fill="#fff"/>
+          <ellipse class="cheek" cx="72" cy="138" rx="10" ry="6" fill="rgb(232,160,124)"/>
+          <ellipse class="cheek" cx="148" cy="138" rx="10" ry="6" fill="rgb(232,160,124)"/>
+          <path d="M78 140c10 18 54 18 64 0" stroke="#4F4428" stroke-width="6" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+
+      <!-- floating book -->
+      <div class="decor float-b" style="left:2%; top:10%; z-index:2;">
+        <svg width="70" height="70" viewBox="0 0 64 64"><rect x="8" y="14" width="48" height="38" rx="6" fill="rgb(232,160,124)"/><rect x="12" y="10" width="40" height="10" rx="3" fill="rgb(246,201,176)"/><line x1="32" y1="14" x2="32" y2="52" stroke="rgba(130,113,72,0.4)" stroke-width="2"/></svg>
+      </div>
+
+      <!-- floating pencil -->
+      <div class="decor float-c" style="right:4%; top:6%; z-index:2;">
+        <svg width="80" height="80" viewBox="0 0 64 64" style="transform:rotate(28deg)"><rect x="26" y="8" width="12" height="40" rx="3" fill="rgb(165,175,121)"/><polygon points="26,48 38,48 32,60" fill="#F2C9A0"/><rect x="26" y="8" width="12" height="8" fill="#4F4428"/></svg>
+      </div>
+
+      <!-- graduation cap -->
+      <div class="decor float-a" style="right:8%; bottom:10%; z-index:2;">
+        <svg width="76" height="76" viewBox="0 0 64 64"><path d="M32 14 L58 26 L32 38 L6 26Z" fill="rgb(232,160,124)"/><path d="M18 30v10c0 5 6 9 14 9s14-4 14-9V30" stroke="rgb(165,175,121)" stroke-width="3" fill="none"/><line x1="52" y1="27" x2="52" y2="42" stroke="rgb(130,113,72)" stroke-width="2"/></svg>
+      </div>
+
+      <!-- stars & sparkles -->
+      <div class="decor spin-slow twinkle" style="left:6%; bottom:16%;">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4 5.7 21l2.3-7.2-6-4.6h7.6z" fill="rgb(165,175,121)"/></svg>
+      </div>
+      <div class="decor spin-slower twinkle" style="right:0%; top:40%;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4 5.7 21l2.3-7.2-6-4.6h7.6z" fill="rgb(232,160,124)"/></svg>
+      </div>
+      <div class="decor twinkle" style="left:34%; bottom:2%;">
+        <svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="rgb(165,175,121)"/></svg>
+      </div>
+      <div class="decor twinkle" style="right:26%; top:2%;">
+        <svg width="12" height="12" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="rgb(232,160,124)"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     WHY STUDENTS WILL LOVE IT
+     ============================================ -->
+<section class="section" id="why">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Why Students Will Love It</div>
+      <h2>Class, but make it exciting</h2>
+      <p>Four reasons students actually look forward to logging in.</p>
+    </div>
+
+    <div class="love-grid">
+      <div class="love-card">
+        <span class="card-star"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4 5.7 21l2.3-7.2-6-4.6h7.6z" fill="rgb(232,160,124)"/></svg></span>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 32 32" fill="none"><rect x="3" y="8" width="20" height="14" rx="3" stroke="rgb(165,175,121)" stroke-width="2.2"/><path d="M23 13l6-3.5v13L23 19" stroke="rgb(165,175,121)" stroke-width="2.2" stroke-linejoin="round"/><circle cx="13" cy="15" r="3" fill="rgb(232,160,124)"/></svg>
+        </div>
+        <h3>Live Classes</h3>
+        <p>Real teachers, real time — ask questions and get answers on the spot.</p>
+      </div>
+
+      <div class="love-card">
+        <span class="card-star"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4 5.7 21l2.3-7.2-6-4.6h7.6z" fill="rgb(165,175,121)"/></svg></span>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="6" fill="rgb(232,160,124)" opacity="0.25"/><path d="M13 11l9 5-9 5V11z" fill="rgb(232,160,124)"/></svg>
+        </div>
+        <h3>Recorded Lessons</h3>
+        <p>Missed a class or want to rewatch? Every session is saved and ready anytime.</p>
+      </div>
+
+      <div class="love-card">
+        <span class="card-star"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4 5.7 21l2.3-7.2-6-4.6h7.6z" fill="rgb(232,160,124)"/></svg></span>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M16 4l4 8h8l-6.5 5 2.5 8-8-5-8 5 2.5-8L4 12h8z" fill="rgb(165,175,121)"/></svg>
+        </div>
+        <h3>Amazing Teachers</h3>
+        <p>Passionate educators who explain things until they really click.</p>
+      </div>
+
+      <div class="love-card">
+        <span class="card-star"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4 5.7 21l2.3-7.2-6-4.6h7.6z" fill="rgb(165,175,121)"/></svg></span>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="12" stroke="rgb(232,160,124)" stroke-width="2.4"/><path d="M16 9v7l5 3" stroke="rgb(232,160,124)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Learn at Your Pace</h3>
+        <p>No rushing, no pressure. Move as fast or as slow as you need.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     MID CTA STRIP
+     ============================================ -->
+<section class="mid-cta">
+  <div class="container">
+    <h2 class="reveal">Ready to make homework the fun part of the day?</h2>
+    <div class="center-actions reveal">
+      <a href="#waitlist" class="btn btn-primary">Join the Waitlist</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     PARENTS SECTION
+     ============================================ -->
+<section class="section parents-section" id="parents">
+  <div class="container">
+    <div class="parents-panel reveal">
+      <div class="parents-grid">
+        <div class="parents-copy">
+          <div class="eyebrow">For Parents</div>
+          <h2>Confidence, not just classes.</h2>
+          <p class="lead">Blip is built so you always know your child is learning in a safe, structured space that’s actually worth your time and money.</p>
+
+          <div class="check-list">
+            <div class="check-item">
+              <span class="tick"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="label">Safe Learning</span>
+            </div>
+            <div class="check-item">
+              <span class="tick"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="label">Experienced Teachers</span>
+            </div>
+            <div class="check-item">
+              <span class="tick"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="label">Affordable</span>
+            </div>
+            <div class="check-item">
+              <span class="tick"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="label">Learn From Home</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parents-art">
+          <svg width="260" height="260" viewBox="0 0 220 220" class="float-b">
+            <ellipse cx="110" cy="205" rx="60" ry="9" fill="rgba(0,0,0,0.12)"/>
+            <path d="M110 26c46 0 74 32 74 78s-32 80-74 80-74-34-74-80 28-78 74-78z" fill="rgb(232,160,124)"/>
+            <path d="M70 96c8-14 24-22 40-22s32 8 40 22" stroke="rgba(255,255,255,0.5)" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="88" cy="112" r="8" fill="#4F4428"/>
+            <circle cx="132" cy="112" r="8" fill="#4F4428"/>
+            <circle cx="91" cy="109" r="2.2" fill="#fff"/>
+            <circle cx="135" cy="109" r="2.2" fill="#fff"/>
+            <path d="M80 132c10 16 50 16 60 0" stroke="#4F4428" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+            <rect x="94" y="150" width="32" height="18" rx="4" fill="rgb(165,175,121)"/>
+            <path d="M56 60L110 40L164 60L110 78Z" fill="rgb(165,175,121)"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     WAITLIST FORM
+     ============================================ -->
+<section class="section waitlist-section" id="waitlist">
+  <div class="decor float-a" style="left:6%; top:6%;"><svg width="46" height="46" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4 5.7 21l2.3-7.2-6-4.6h7.6z" fill="rgb(165,175,121)"/></svg></div>
+  <div class="decor float-c" style="right:8%; bottom:10%;"><svg width="60" height="60" viewBox="0 0 64 64"><rect x="8" y="14" width="48" height="38" rx="6" fill="rgb(232,160,124)" opacity="0.85"/><rect x="12" y="10" width="40" height="10" rx="3" fill="rgb(246,201,176)"/></svg></div>
+
+  <div class="container waitlist-wrap">
+    <div class="waitlist-card reveal">
+
+      <form id="waitlistForm">
+        <div class="waitlist-head">
+          <div class="eyebrow">Limited Early Access</div>
+          <h2>Get on the Waitlist</h2>
+          <p>Be the first to know when we open. No spam — just good news.</p>
+        </div>
+
+        <div class="form-grid">
+          <div class="field full">
+            <label for="wl-name">Full Name</label>
+            <input id="wl-name" name="name" type="text" placeholder="e.g. Amara Okafor" required>
+          </div>
+          <div class="field">
+            <label for="wl-email">Email</label>
+            <input id="wl-email" name="email" type="email" placeholder="you@example.com" required>
+          </div>
+          <div class="field">
+            <label for="wl-phone">Phone Number</label>
+            <input id="wl-phone" name="phone" type="tel" placeholder="080X XXX XXXX" required>
+          </div>
+          <div class="field">
+            <label for="wl-class">Class</label>
+            <select id="wl-class" name="studentClass" required>
+              <option value="" disabled selected>Select class</option>
+              <option>JS1</option><option>JS2</option><option>JS3</option>
+              <option>SS1</option><option>SS2</option><option>SS3</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>I am a...</label>
+            <div class="role-toggle" role="group" aria-label="Student or Parent">
+              <button type="button" class="role-btn active" data-role="Student">Student</button>
+              <button type="button" class="role-btn" data-role="Parent">Parent</button>
+            </div>
+            <input type="hidden" name="role" id="wl-role" value="Student">
+          </div>
+        </div>
+
+        <div class="form-error" id="wl-error"></div>
+        <button type="submit" class="btn btn-primary">Join the Waitlist 🎉</button>
+        <p class="form-note">Free to join. We'll never share your info.</p>
+      </form>
+
+      <div class="success-state" id="successState">
+        <div class="checkmark-wrap">
+          <svg viewBox="0 0 80 80" width="90" height="90">
+            <circle class="checkmark-circle" cx="40" cy="40" r="34" fill="none"/>
+            <path class="checkmark-check" d="M24 41l11 11 21-23" fill="none"/>
+          </svg>
+        </div>
+        <h3>You're on the list, <span id="successName">friend</span>! 🎉</h3>
+        <p>We'll email you the moment Blip opens its virtual doors. Get ready to have fun learning.</p>
+        <button type="button" class="btn btn-secondary btn-sm" id="resetForm">Add another person</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     TEACHER SECTION
+     ============================================ -->
+<section class="section teacher-section" id="teachers">
+  <div class="container">
+    <div class="teacher-grid">
+      <div class="teacher-copy reveal">
+        <div class="eyebrow">For Teachers</div>
+        <h2>Teach the students who need you most.</h2>
+        <p class="lead">Join a growing group of Nigerian educators shaping the future of learning — flexible hours, real impact, and fair pay.</p>
+
+        <div class="teacher-art">
+          <svg width="230" height="230" viewBox="0 0 220 220" class="float-a">
+            <ellipse cx="110" cy="205" rx="62" ry="9" fill="rgba(130,113,72,0.10)"/>
+            <path d="M110 28c46 0 76 32 76 80s-32 82-76 82-76-34-76-82 30-80 76-80z" fill="rgb(165,175,121)"/>
+            <path d="M60 44 L110 22 L160 44 L110 62Z" fill="rgb(232,160,124)"/>
+            <rect x="106" y="62" width="8" height="24" fill="rgb(232,160,124)"/>
+            <circle cx="86" cy="116" r="8.5" fill="#4F4428"/>
+            <circle cx="134" cy="116" r="8.5" fill="#4F4428"/>
+            <path d="M78 138c10 16 54 16 64 0" stroke="#4F4428" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <rect x="70" y="164" width="80" height="10" rx="5" fill="rgba(255,255,255,0.5)"/>
+          </svg>
+          <div class="decor twinkle" style="left:2%; top:4%;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4 5.7 21l2.3-7.2-6-4.6h7.6z" fill="rgb(232,160,124)"/></svg></div>
+        </div>
+      </div>
+
+      <div class="teacher-card reveal">
+        <form id="teacherForm">
+          <div class="form-grid">
+            <div class="field full">
+              <label for="tc-name">Full Name</label>
+              <input id="tc-name" type="text" placeholder="e.g. Mr. Bello" required>
+            </div>
+            <div class="field">
+              <label for="tc-email">Email</label>
+              <input id="tc-email" type="email" placeholder="you@example.com" required>
+            </div>
+            <div class="field">
+              <label for="tc-subject">Subject</label>
+              <input id="tc-subject" type="text" placeholder="e.g. Mathematics" required>
+            </div>
+            <div class="field full">
+              <label for="tc-exp">Teaching Experience</label>
+              <textarea id="tc-exp" placeholder="Tell us a bit about your teaching background…"></textarea>
+            </div>
+          </div>
+          <div class="form-error" id="tc-error"></div>
+          <button type="submit" class="btn btn-primary">Apply to Teach</button>
+        </form>
+        <div class="success-state" id="teacherSuccess">
+          <div class="checkmark-wrap">
+            <svg viewBox="0 0 80 80" width="90" height="90">
+              <circle class="checkmark-circle" cx="40" cy="40" r="34" fill="none"/>
+              <path class="checkmark-check" d="M24 41l11 11 21-23" fill="none"/>
+            </svg>
+          </div>
+          <h3>Application received! 🎓</h3>
+          <p>We'll get back to you soon. Thanks for wanting to teach with Blip — we'll reach out as we build our founding team.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER (social buttons removed)
+     ============================================ -->
+<footer class="footer">
+  <div class="footer-blob"></div>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="26" r="17" fill="rgb(165,175,121)"/>
+              <path d="M24 6 L38 12 L24 18 L10 12 Z" fill="rgb(232,160,124)"/>
+              <circle cx="19" cy="25" r="2.4" fill="#2F2814"/>
+              <circle cx="29" cy="25" r="2.4" fill="#2F2814"/>
+            </svg>
+          </span>
+          Blip
+        </a>
+        <p>Nigeria's upcoming virtual classroom for JS1–SS3 students. Learning, made joyful.</p>
+      </div>
+
+      <div>
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="#why">Why Blip</a></li>
+          <li><a href="#parents">For Parents</a></li>
+          <li><a href="#teachers">For Teachers</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Get Started</h4>
+        <ul class="footer-links">
+          <li><a href="#waitlist">Join Waitlist</a></li>
+          <li><a href="#teachers">Become a Teacher</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:hello@blip.ng">blipnigeria@gmail.com</a></li>
+          <li><a href="#">Lagos, Nigeria</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Blip.</span>
+      <span>Learning just got more fun.</span>
+    </div>
+  </div>
+</footer>
+
+<canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+
+<script>
+(function(){
+  "use strict";
+
+  /* -------- Year -------- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* -------- Navbar scroll state -------- */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 12);
+  }, { passive:true });
+
+  /* -------- Mobile menu -------- */
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+  }));
+
+  /* -------- Scroll reveal -------- */
+  const revealEls = document.querySelectorAll('.reveal, .love-card');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  /* -------- Card tilt effect -------- */
+  document.querySelectorAll('.love-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `perspective(600px) rotateX(${(-y*8).toFixed(2)}deg) rotateY(${(x*8).toFixed(2)}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+
+  /* -------- Role toggle (Student / Parent) -------- */
+  const roleBtns = document.querySelectorAll('.role-btn');
+  const roleInput = document.getElementById('wl-role');
+  roleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      roleBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      roleInput.value = btn.dataset.role;
+    });
+  });
+
+  /* -------- Confetti -------- */
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const confettiColors = ['rgb(165,175,121)','rgb(232,160,124)','rgb(126,138,84)','rgb(246,201,176)','#ffffff'];
+
+  function burstConfetti(){
+    const pieces = [];
+    const count = 140;
+    for (let i=0;i<count;i++){
+      pieces.push({
+        x: canvas.width/2 + (Math.random()-0.5)*140,
+        y: canvas.height*0.35 + (Math.random()-0.5)*60,
+        vx: (Math.random()-0.5)*11,
+        vy: Math.random()*-11 - 4,
+        size: Math.random()*7+4,
+        color: confettiColors[Math.floor(Math.random()*confettiColors.length)],
+        rot: Math.random()*360,
+        vrot: (Math.random()-0.5)*14,
+        shape: Math.random() > 0.5 ? 'rect' : 'circle',
+        gravity: 0.22 + Math.random()*0.1,
+        life: 0
+      });
+    }
+    let frame = 0;
+    const maxFrames = 130;
+    function tick(){
+      frame++;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      pieces.forEach(p => {
+        p.vy += p.gravity;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vrot;
+        p.life++;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot * Math.PI/180);
+        ctx.globalAlpha = Math.max(0, 1 - frame/maxFrames);
+        ctx.fillStyle = p.color;
+        if (p.shape === 'rect'){
+          ctx.fillRect(-p.size/2, -p.size/3, p.size, p.size*0.6);
+        } else {
+          ctx.beginPath();
+          ctx.arc(0,0,p.size/2,0,Math.PI*2);
+          ctx.fill();
+        }
+        ctx.restore();
+      });
+      if (frame < maxFrames){
+        requestAnimationFrame(tick);
+      } else {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+      }
+    }
+    tick();
+  }
+
+  /* -------- Supabase Client Initialization -------- */
+  const SUPABASE_URL = window.SUPABASE_URL || 'https://djklahlxlhsemyhbbiio.supabase.co';
+  const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqa2xhaGx4bGhzZW15aGJiaWlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MTEyODUsImV4cCI6MjA5OTE4NzI4NX0.c2rdGmigybvsm9qtLVgfCL_Un1PZKjPXGpSUrPqszss';
+  
+  let supabaseClient = null;
+  const hasSupabaseCreds = SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY';
+  
+  if (hasSupabaseCreds && typeof supabase !== 'undefined') {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } else {
+    console.warn("Supabase credentials not configured. Form submissions will be simulated.");
+  }
+
+  /* -------- Waitlist form submit -------- */
+  const waitlistForm = document.getElementById('waitlistForm');
+  const successState = document.getElementById('successState');
+  const successName = document.getElementById('successName');
+  const resetBtn = document.getElementById('resetForm');
+  const wlError = document.getElementById('wl-error');
+  const wlSubmitBtn = waitlistForm.querySelector('button[type="submit"]');
+
+  waitlistForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    wlError.classList.remove('show');
+    wlError.textContent = '';
+    
+    const nameVal = document.getElementById('wl-name').value.trim();
+    const emailVal = document.getElementById('wl-email').value.trim();
+    const phoneVal = document.getElementById('wl-phone').value.trim();
+    const classVal = document.getElementById('wl-class').value;
+    const roleVal = document.getElementById('wl-role').value;
+
+    wlSubmitBtn.classList.add('loading');
+    wlSubmitBtn.disabled = true;
+
+    try {
+      if (supabaseClient) {
+        const { error } = await supabaseClient.from('waitlist').insert([
+          {
+            name: nameVal,
+            email: emailVal,
+            phone: phoneVal,
+            student_class: classVal,
+            role: roleVal
+          }
+        ]);
+        if (error) throw error;
+      } else {
+        // Simulation mode
+        await new Promise(resolve => setTimeout(resolve, 800));
+        console.log('Waitlist submission (Simulated):', { nameVal, emailVal, phoneVal, classVal, roleVal });
+      }
+
+      successName.textContent = nameVal ? nameVal.split(' ')[0] : 'friend';
+      waitlistForm.style.display = 'none';
+      successState.classList.add('show');
+      burstConfetti();
+    } catch (err) {
+      console.error('Waitlist submission error:', err);
+      wlError.textContent = err.message || 'Something went wrong. Please try again.';
+      wlError.classList.add('show');
+    } finally {
+      wlSubmitBtn.classList.remove('loading');
+      wlSubmitBtn.disabled = false;
+    }
+  });
+
+  resetBtn.addEventListener('click', () => {
+    waitlistForm.reset();
+    wlError.classList.remove('show');
+    wlError.textContent = '';
+    roleBtns.forEach(b => b.classList.remove('active'));
+    roleBtns[0].classList.add('active');
+    roleInput.value = 'Student';
+    successState.classList.remove('show');
+    waitlistForm.style.display = 'block';
+  });
+
+  /* -------- Teacher form submit -------- */
+  const teacherForm = document.getElementById('teacherForm');
+  const teacherSuccess = document.getElementById('teacherSuccess');
+  const tcError = document.getElementById('tc-error');
+  const tcSubmitBtn = teacherForm.querySelector('button[type="submit"]');
+
+  teacherForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    tcError.classList.remove('show');
+    tcError.textContent = '';
+
+    const nameVal = document.getElementById('tc-name').value.trim();
+    const emailVal = document.getElementById('tc-email').value.trim();
+    const subjectVal = document.getElementById('tc-subject').value.trim();
+    const expVal = document.getElementById('tc-exp').value.trim();
+
+    tcSubmitBtn.classList.add('loading');
+    tcSubmitBtn.disabled = true;
+
+    try {
+      if (supabaseClient) {
+        const { error } = await supabaseClient.from('teachers').insert([
+          {
+            name: nameVal,
+            email: emailVal,
+            subject: subjectVal,
+            experience: expVal
+          }
+        ]);
+        if (error) throw error;
+      } else {
+        // Simulation mode
+        await new Promise(resolve => setTimeout(resolve, 800));
+        console.log('Teacher application (Simulated):', { nameVal, emailVal, subjectVal, expVal });
+      }
+
+      teacherForm.style.display = 'none';
+      teacherSuccess.classList.add('show');
+      burstConfetti();
+    } catch (err) {
+      console.error('Teacher application error:', err);
+      tcError.textContent = err.message || 'Something went wrong. Please try again.';
+      tcError.classList.add('show');
+    } finally {
+      tcSubmitBtn.classList.remove('loading');
+      tcSubmitBtn.disabled = false;
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>

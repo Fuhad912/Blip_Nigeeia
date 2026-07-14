@@ -1,0 +1,256 @@
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400..700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  line-height: 1.55;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  margin: 0 0 0.5em 0;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 1em 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+::selection {
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-secondary-dark);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 40px;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 16px;
+  padding: 15px 28px;
+  border-radius: var(--r-full);
+  transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), background 0.3s ease, filter 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+  text-decoration: none;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-card);
+  box-shadow: 0 8px 0 var(--color-primary-dark), var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 11px 0 var(--color-primary-dark), var(--shadow-lift);
+}
+
+.btn-primary:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--color-card);
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-cta {
+  background-color: var(--color-cta);
+  color: var(--color-ink);
+  box-shadow: 0 8px 0 #D97706, var(--shadow-sm);
+}
+
+.btn-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 11px 0 #D97706, var(--shadow-lift);
+}
+
+.btn-cta:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 #D97706;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-ink);
+  border: 2px solid rgba(var(--rgb-ink), 0.1);
+}
+
+.btn-outline:hover {
+  background-color: rgba(var(--rgb-primary), 0.05);
+  border-color: var(--color-primary);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-sm {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.btn.loading {
+  pointer-events: none;
+  opacity: 0.8;
+  color: transparent !important;
+}
+
+.btn.loading::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  border-right-color: currentColor;
+  border-radius: 50%;
+  animation: btnSpinner 0.8s linear infinite;
+  left: calc(50% - 10px);
+  top: calc(50% - 10px);
+}
+
+.btn-secondary.loading::after, .btn-outline.loading::after {
+  border: 3px solid rgba(var(--rgb-ink), 0.1);
+  border-right-color: var(--color-ink);
+}
+
+@keyframes btnSpinner {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   FLOATING DECOR (Animations)
+   ============================================ */
+.decor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.9;
+  will-change: transform, opacity;
+}
+
+.float-a { animation: floatA 6s ease-in-out infinite; will-change: transform; }
+.float-b { animation: floatB 7.5s ease-in-out infinite; will-change: transform; }
+.float-c { animation: floatC 5.5s ease-in-out infinite; will-change: transform; }
+
+@keyframes floatA {
+  0%, 100% { transform: translateY(0px) rotate(-4deg); }
+  50% { transform: translateY(-18px) rotate(4deg); }
+}
+
+@keyframes floatB {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(14px) translateX(8px); }
+}
+
+@keyframes floatC {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-10px) scale(1.06); }
+}
+
+/* Organic blob background shapes */
+.blob-bg {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  z-index: 0;
+  pointer-events: none;
+}
